@@ -1,6 +1,6 @@
 import { createClient } from 'redis';
 
-class ReddisClient {
+class RedisClient {
   constructor() {
     this.client = createClient();
     this.connected = true;
@@ -15,16 +15,18 @@ class ReddisClient {
   }
 
   async get(k) {
-    return this.client.GET(k);
+    return promisify(this.client.GET).bind(this.client)(k);
   }
 
   async set(k, val, duration) {
-    this.client.SETEX(k, duration, val);
+    await promisify(this.client.SETEX)
+      .bind(this.client)(k, duration, val);
   }
 
   async del(k) {
-    this.client.DEL(k);
+    await promisify(this.client.DEL).bind(this.client)(k);
   }
 }
 
-module.exports = ReddisClient;
+export const redisClient = new RedisClient();
+export default redisClient;
