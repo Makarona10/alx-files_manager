@@ -1,4 +1,4 @@
-import MongoClient from 'mongodb/lib/mongo_client.js';
+import MongoClient from 'mongodb/lib/mongo_client';
 
 class DBClient {
   constructor() {
